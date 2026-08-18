@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.sop/schemas/sop-config.schema.json",
+  "title": "Portable SOP bundle configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "bundle_root",
+    "projects_root",
+    "templates_root",
+    "schemas_root",
+    "workspaces",
+    "project_paths"
+  ],
+  "properties": {
+    "version": { "const": 1 },
+    "bundle_root": { "$ref": "#/$defs/portable_uri" },
+    "projects_root": { "$ref": "#/$defs/portable_uri" },
+    "templates_root": { "$ref": "#/$defs/portable_uri" },
+    "schemas_root": { "$ref": "#/$defs/portable_uri" },
+    "workspaces": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["req", "ui", "arch", "code", "ppt"],
+      "properties": {
+        "req": { "$ref": "#/$defs/portable_uri" },
+        "ui": { "$ref": "#/$defs/portable_uri" },
+        "arch": { "$ref": "#/$defs/portable_uri" },
+        "code": { "$ref": "#/$defs/portable_uri" },
+        "ppt": { "$ref": "#/$defs/portable_uri" }
+      }
+    },
+    "project_paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["intake", "req", "ppt_path", "ui", "arch", "code", "test", "docs"],
+      "properties": {
+        "intake": { "$ref": "#/$defs/portable_uri" },
+        "req": { "$ref": "#/$defs/portable_uri" },
+        "ppt_path": {
+          "oneOf": [
+            { "$ref": "#/$defs/portable_uri" },
+            { "type": "null" }
+          ]
+        },
+        "ui": { "$ref": "#/$defs/portable_uri" },
+        "arch": { "$ref": "#/$defs/portable_uri" },
+        "code": { "$ref": "#/$defs/portable_uri" },
+        "test": { "$ref": "#/$defs/portable_uri" },
+        "docs": { "$ref": "#/$defs/portable_uri" }
+      }
+    }
+  },
+  "$defs": {
+    "portable_uri": {
+      "type": "string",
+      "pattern": "^(bundle|project)://(?:[^{}\\\\]|\\{slug\\})*$"
+    }
+  }
+}

@@ -1,0 +1,198 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.sop/schemas/state.schema.json",
+  "title": "SOP project machine state",
+  "description": "Machine-readable cache only. Human gates require conversational confirmation recorded in APPROVALS.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "slug",
+    "lifecycle",
+    "origin",
+    "current_stage",
+    "mode",
+    "stage_status",
+    "ui_input_mode",
+    "blocked",
+    "paths",
+    "timestamps",
+    "approval_refs",
+    "governance",
+    "_authority_note"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "slug": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "lifecycle": { "enum": ["active", "paused", "cancelled", "archived"] },
+    "origin": { "enum": ["new", "historical"] },
+    "current_stage": {
+      "enum": ["IDLE", "INTAKE", "REQ", "PPT", "UI", "ARCH", "TEST", "CODE", "DOCS"]
+    },
+    "mode": {
+      "type": ["string", "null"],
+      "enum": ["packaging", "regression", "none", null]
+    },
+    "stage_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["INTAKE", "REQ", "PPT", "UI", "ARCH", "TEST", "CODE", "DOCS"],
+      "properties": {
+        "INTAKE": { "$ref": "#/$defs/stage_status_value" },
+        "REQ": { "$ref": "#/$defs/stage_status_value" },
+        "PPT": { "$ref": "#/$defs/stage_status_value" },
+        "UI": { "$ref": "#/$defs/stage_status_value" },
+        "ARCH": { "$ref": "#/$defs/stage_status_value" },
+        "TEST": { "$ref": "#/$defs/stage_status_value" },
+        "CODE": { "$ref": "#/$defs/stage_status_value" },
+        "DOCS": { "$ref": "#/$defs/stage_status_value" }
+      }
+    },
+    "ui_input_mode": {
+      "type": ["string", "null"],
+      "enum": ["complete", "partial", "none", null]
+    },
+    "blocked": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/blocked" }
+      ]
+    },
+    "paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["intake", "req", "ppt_path", "ui", "arch", "code", "test", "docs"],
+      "properties": {
+        "intake": { "$ref": "#/$defs/portable_uri" },
+        "req": { "$ref": "#/$defs/portable_uri" },
+        "ppt_path": {
+          "oneOf": [
+            { "$ref": "#/$defs/portable_uri" },
+            { "type": "null" }
+          ]
+        },
+        "ui": { "$ref": "#/$defs/portable_uri" },
+        "arch": { "$ref": "#/$defs/portable_uri" },
+        "code": { "$ref": "#/$defs/portable_uri" },
+        "test": { "$ref": "#/$defs/portable_uri" },
+        "docs": { "$ref": "#/$defs/portable_uri" }
+      }
+    },
+    "timestamps": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "updated_at",
+        "last_code_change_at",
+        "last_regression_at",
+        "intake_completed_at",
+        "test_pack_at",
+        "docs_completed_at",
+        "lifecycle_changed_at"
+      ],
+      "properties": {
+        "updated_at": { "type": ["string", "null"], "format": "date-time" },
+        "last_code_change_at": { "type": ["string", "null"], "format": "date-time" },
+        "last_regression_at": { "type": ["string", "null"], "format": "date-time" },
+        "intake_completed_at": { "type": ["string", "null"], "format": "date-time" },
+        "test_pack_at": { "type": ["string", "null"], "format": "date-time" },
+        "docs_completed_at": { "type": ["string", "null"], "format": "date-time" },
+        "lifecycle_changed_at": { "type": ["string", "null"], "format": "date-time" }
+      }
+    },
+    "approval_refs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "INTAKE_COMPLETE": { "$ref": "#/$defs/approval_id" },
+        "REQ_SIGNOFF": { "$ref": "#/$defs/approval_id" },
+        "UI_SIGNOFF": { "$ref": "#/$defs/approval_id" },
+        "ARCH_SIGNOFF": { "$ref": "#/$defs/approval_id" },
+        "TEST_PACK_READY": { "$ref": "#/$defs/approval_id" },
+        "CODE_READY": { "$ref": "#/$defs/approval_id" },
+        "REGRESSION_PASS": { "$ref": "#/$defs/approval_id" },
+        "DOCS_COMPLETE": { "$ref": "#/$defs/approval_id" }
+      }
+    },
+    "governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "data_classification",
+        "regulated_data",
+        "residency",
+        "retention",
+        "access_audit",
+        "third_party_transfer",
+        "compliance_owner",
+        "active_waiver_ids"
+      ],
+      "properties": {
+        "data_classification": {
+          "type": ["string", "null"],
+          "enum": ["public", "internal", "confidential", "restricted", null]
+        },
+        "regulated_data": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "residency": { "type": ["string", "null"] },
+        "retention": { "type": ["string", "null"] },
+        "access_audit": { "type": ["string", "null"] },
+        "third_party_transfer": { "type": ["string", "null"] },
+        "compliance_owner": { "type": ["string", "null"] },
+        "active_waiver_ids": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^DEC-[A-Za-z0-9_-]+$" }
+        }
+      }
+    },
+    "regression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "mode", "last_run", "updated_at"],
+      "properties": {
+        "state": { "enum": ["passed", "failed", "not_run", "partial"] },
+        "mode": { "enum": ["full", "code-only", "product-only"] },
+        "last_run": { "type": "string", "minLength": 1 },
+        "updated_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "_authority_note": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "stage_status_value": {
+      "enum": ["not_started", "in_progress", "blocked", "approved", "na"]
+    },
+    "blocked": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gate_id", "owner_role", "reason", "since"],
+      "properties": {
+        "gate_id": {
+          "enum": [
+            "INTAKE_COMPLETE",
+            "REQ_SIGNOFF",
+            "UI_SIGNOFF",
+            "ARCH_SIGNOFF",
+            "TEST_PACK_READY",
+            "CODE_READY",
+            "REGRESSION_PASS",
+            "DOCS_COMPLETE"
+          ]
+        },
+        "owner_role": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "since": { "type": "string", "format": "date-time" }
+      }
+    },
+    "approval_id": {
+      "type": "string",
+      "pattern": "^APR-[A-Za-z0-9_-]+$"
+    },
+    "portable_uri": {
+      "type": "string",
+      "pattern": "^(bundle|project)://[^\\\\]*$"
+    }
+  }
+}

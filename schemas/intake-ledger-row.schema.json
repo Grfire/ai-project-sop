@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-project-sop.local/schemas/intake-ledger-row.schema.json",
+  "title": "Historical intake reading-ledger.csv row",
+  "description": "JSON Schema representation of one CSV row. CSV headers equal the required property names.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "path",
+    "bytes",
+    "modified_utc",
+    "extension",
+    "sha256",
+    "class",
+    "status",
+    "reason",
+    "evidence_ids",
+    "read_at"
+  ],
+  "properties": {
+    "path": { "type": "string", "minLength": 1, "pattern": "^[^\\\\]+(?:/[^\\\\]+)*$" },
+    "bytes": { "type": ["integer", "string"], "pattern": "^[0-9]+$" },
+    "modified_utc": { "type": "string", "format": "date-time" },
+    "extension": { "type": "string" },
+    "sha256": {
+      "type": "string",
+      "pattern": "^$|^[a-f0-9]{64}$"
+    },
+    "class": { "type": "string", "minLength": 1 },
+    "status": {
+      "enum": [
+        "pending",
+        "read",
+        "indexed",
+        "extracted-read",
+        "skipped-sensitive",
+        "skipped-generated",
+        "unsupported",
+        "removed-at-source"
+      ]
+    },
+    "reason": { "type": "string", "minLength": 1 },
+    "evidence_ids": {
+      "type": "string",
+      "pattern": "^$|^(?:E|BACKFILL)-[A-Za-z0-9_-]+(?:;(?:E|BACKFILL)-[A-Za-z0-9_-]+)*$"
+    },
+    "read_at": {
+      "type": "string",
+      "description": "Empty only while status is pending; terminal statuses use ISO-8601 UTC.",
+      "pattern": "^$|^[0-9]{4}-[0-9]{2}-[0-9]{2}T"
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "skipped-sensitive" } } },
+      "then": { "properties": { "sha256": { "const": "" } } }
+    },
+    {
+      "if": { "properties": { "status": { "enum": ["read", "extracted-read"] } } },
+      "then": {
+        "properties": {
+          "evidence_ids": { "minLength": 1 },
+          "read_at": { "minLength": 1 }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "removed-at-source" } } },
+      "then": {
+        "properties": {
+          "reason": { "pattern": "absent from the current source" }
+        }
+      }
+    }
+  ]
+}

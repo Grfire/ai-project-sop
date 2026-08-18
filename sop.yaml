@@ -1,0 +1,20 @@
+version: 1
+bundle_root: bundle://
+projects_root: bundle://projects
+templates_root: bundle://vendor-templates
+schemas_root: bundle://schemas
+workspaces:
+  req: bundle://workspaces/req/projects/{slug}
+  ui: bundle://workspaces/ui/projects/{slug}
+  arch: bundle://workspaces/arch/projects/{slug}
+  code: bundle://workspaces/code/project/{slug}
+  ppt: bundle://workspaces/ppt/projects
+project_paths:
+  intake: project://intake
+  req: bundle://workspaces/req/projects/{slug}
+  ppt_path: null
+  ui: bundle://workspaces/ui/projects/{slug}
+  arch: bundle://workspaces/arch/projects/{slug}
+  code: bundle://workspaces/code/project/{slug}
+  test: project://test
+  docs: project://docs

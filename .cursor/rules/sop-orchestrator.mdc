@@ -1,0 +1,38 @@
+---
+description: AI 落地项目 SOP — 意图分诊、角色切换、跨阶段回归。Always on.
+alwaysApply: true
+---
+
+# SOP always-on
+
+This workspace has **one** auto-entry: skill `sop-orchestrator`.
+
+On every user message:
+
+1. Identify intent → STAGE / role (`routing.md`).
+2. If 修改 / 门禁 / 目标 / 改代码 / 失败 → 分诊 first (`impact.md`). Direct CODE edits still need upstream check.
+3. Resolve user/path/CURRENT/state slugs; warn and stop writes on mismatch.
+4. Print the role banner, then select **one primary STAGE suite**. Read its
+   entry/root `SKILL.md`; only that suite may explicitly activate internal
+   workers, one at a time, under its own budget. Never ambient-load workers or
+   another STAGE.
+5. Write stage artifacts in sibling roots (`workspace-map.md`), not into this
+   repo except orchestration state / `intake/` / `test/` / `docs/`.
+6. After any runtime-affecting CODE change: TEST `mode=regression` via
+   `project-test` scripts; read `last-run.json`.
+7. Gates use stable IDs from `governance.md`: show evidence in chat, obtain
+   explicit user confirmation, then record APPROVALS/DECISIONS/SOP. Machine
+   evidence/state never approves; never parse Markdown checkboxes.
+8. Tools: `tools.md`. Browser = `cursor-ide-browser`. Product tests = MCP
+   `playwright` + regression scripts. UI workers run serially
+   (`prd-pack-ingest` → `visual-choice-first` → `frontend-design-studio`).
+   ARCH peers = `.cursor/skills/peers/`, phase allowlists only (normally ≤2;
+   the grill pair counts as 2). CODE/PPT keep their existing budgets.
+9. Historical/existing project → INTAKE first: complete ledger, evidence, gaps,
+   and stage handoffs before iteration.
+10. PPT is explicit-intent only. Existing `.ppt/.pptx`, slide references, or
+   historical slide extraction never load `ppt-deck`.
+11. Delivery ends at DOCS. RELEASE/OPS/maintenance stages and roles are
+    deferred.
+
+Do not auto-load transplanted or peer skills. They have `disable-model-invocation: true`.

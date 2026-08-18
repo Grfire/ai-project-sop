@@ -1,0 +1,17 @@
+version: 1
+slug: sample-app
+source:
+  prd: E:/workspace/ai_req_analysis/projects/sample-app/PRD.md
+  arch: E:/workspace/ai_architecture_design/projects/sample-app/design/05-api-data.md
+  ui: E:/workspace/ai-font-design/projects/sample-app/design/design-spec.md
+generated_at: "2026-08-17T00:00:00Z"
+cases:
+  - id: AC-01
+    title: Entry is reachable
+    layer: both
+    priority: P0
+    trace: [AC-01, F-01, P-01]
+    code: tests/test_entry.py::test_entry
+    product: product/tests/smoke.spec.ts
+    deferred: false
+    notes: ""

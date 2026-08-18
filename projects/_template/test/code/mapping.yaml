@@ -1,0 +1,2 @@
+# case_id → test node id (pytest nodeid / jest path / mvn -Dtest=)
+cases: {}

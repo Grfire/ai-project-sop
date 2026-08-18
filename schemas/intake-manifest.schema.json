@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-project-sop.local/schemas/intake-manifest.schema.json",
+  "title": "Historical intake manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "slug",
+    "source_path",
+    "generated_at",
+    "limits",
+    "scan",
+    "eligible_pending",
+    "removed_at_source",
+    "total_ledger_files",
+    "statuses",
+    "excluded_directories"
+  ],
+  "properties": {
+    "version": { "const": 2 },
+    "slug": { "type": "string", "minLength": 1 },
+    "source_path": { "type": "string", "minLength": 1 },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_files", "max_bytes", "max_file_bytes"],
+      "properties": {
+        "max_files": { "type": "integer", "minimum": 1 },
+        "max_bytes": { "type": "integer", "minimum": 1 },
+        "max_file_bytes": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "scan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["is_truncated", "truncation_reason", "inventory_bytes"],
+      "properties": {
+        "is_truncated": { "type": "boolean" },
+        "truncation_reason": { "type": "string" },
+        "inventory_bytes": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "eligible_pending": { "type": "integer", "minimum": 0 },
+    "removed_at_source": { "type": "integer", "minimum": 0 },
+    "total_ledger_files": { "type": "integer", "minimum": 0 },
+    "statuses": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
+    "excluded_directories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "reason"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

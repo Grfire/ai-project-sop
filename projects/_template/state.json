@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "slug": "{{project-slug}}",
+  "lifecycle": "active",
+  "origin": "new",
+  "current_stage": "REQ",
+  "mode": null,
+  "stage_status": {
+    "INTAKE": "na",
+    "REQ": "in_progress",
+    "PPT": "na",
+    "UI": "not_started",
+    "ARCH": "not_started",
+    "TEST": "not_started",
+    "CODE": "not_started",
+    "DOCS": "not_started"
+  },
+  "ui_input_mode": null,
+  "blocked": null,
+  "paths": {
+    "intake": "project://intake",
+    "req": "bundle://workspaces/req/projects/{{project-slug}}",
+    "ppt_path": null,
+    "ui": "bundle://workspaces/ui/projects/{{project-slug}}",
+    "arch": "bundle://workspaces/arch/projects/{{project-slug}}",
+    "code": "bundle://workspaces/code/project/{{project-slug}}",
+    "test": "project://test",
+    "docs": "project://docs"
+  },
+  "timestamps": {
+    "updated_at": null,
+    "last_code_change_at": null,
+    "last_regression_at": null,
+    "intake_completed_at": null,
+    "test_pack_at": null,
+    "docs_completed_at": null,
+    "lifecycle_changed_at": null
+  },
+  "approval_refs": {},
+  "governance": {
+    "data_classification": null,
+    "regulated_data": [],
+    "residency": null,
+    "retention": null,
+    "access_audit": null,
+    "third_party_transfer": null,
+    "compliance_owner": null,
+    "active_waiver_ids": []
+  },
+  "_authority_note": "Machine state only. Human gates require conversational confirmation recorded in APPROVALS.md."
+}

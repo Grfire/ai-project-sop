@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "slug": "sample-app",
+  "mode": "full",
+  "started_at": "2026-08-17T00:00:00Z",
+  "finished_at": "2026-08-17T00:01:00Z",
+  "access_url": "http://127.0.0.1:18088",
+  "freshness": {
+    "source": "state.json",
+    "last_code_change_at": "2026-08-16T23:59:00Z",
+    "regression_started_after_code_change": true
+  },
+  "commands": ["pytest -q", "npx playwright test --reporter=json"],
+  "code": {
+    "command": "pytest -q",
+    "exit_code": 0,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "status": "passed",
+    "log": "logs/code.txt"
+  },
+  "product": {
+    "command": "npx playwright test --reporter=json",
+    "exit_code": 0,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "status": "passed",
+    "log": "logs/product.txt",
+    "report": "logs/product-report.json"
+  },
+  "lifecycle": {
+    "start_command": null,
+    "stop_command": null,
+    "health_url": "http://127.0.0.1:18088/health",
+    "startup_timeout_seconds": 60,
+    "started": false,
+    "healthy": true,
+    "stop_exit_code": null
+  },
+  "failures": [],
+  "warnings": [],
+  "overall": "PASS",
+  "logs": {
+    "directory": "logs",
+    "code": "logs/code.txt",
+    "product": "logs/product.txt",
+    "product_report": "logs/product-report.json",
+    "app_start": "logs/app-start.txt",
+    "app_start_error": "logs/app-start-error.txt",
+    "app_stop": "logs/app-stop.txt"
+  }
+}

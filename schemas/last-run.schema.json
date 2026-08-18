@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.sop/schemas/last-run.schema.json",
+  "title": "SOP regression result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "slug",
+    "mode",
+    "started_at",
+    "finished_at",
+    "access_url",
+    "freshness",
+    "commands",
+    "code",
+    "product",
+    "lifecycle",
+    "failures",
+    "warnings",
+    "overall",
+    "logs"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "slug": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "mode": { "enum": ["full", "code-only", "product-only"] },
+    "started_at": { "type": ["string", "null"], "format": "date-time" },
+    "finished_at": { "type": ["string", "null"], "format": "date-time" },
+    "access_url": { "type": ["string", "null"] },
+    "freshness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "last_code_change_at", "regression_started_after_code_change"],
+      "properties": {
+        "source": { "enum": ["state.json", "SOP.md", "none"] },
+        "last_code_change_at": { "type": ["string", "null"], "format": "date-time" },
+        "regression_started_after_code_change": { "type": ["boolean", "null"] }
+      }
+    },
+    "commands": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "code": { "$ref": "#/$defs/suite" },
+    "product": {
+      "allOf": [
+        { "$ref": "#/$defs/suite" },
+        {
+          "type": "object",
+          "required": ["report"],
+          "properties": { "report": { "type": "string" } }
+        }
+      ]
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "start_command",
+        "stop_command",
+        "health_url",
+        "startup_timeout_seconds",
+        "started",
+        "healthy",
+        "stop_exit_code"
+      ],
+      "properties": {
+        "start_command": { "type": ["string", "null"] },
+        "stop_command": { "type": ["string", "null"] },
+        "health_url": { "type": ["string", "null"] },
+        "startup_timeout_seconds": { "type": "integer", "minimum": 1 },
+        "started": { "type": "boolean" },
+        "healthy": { "type": ["boolean", "null"] },
+        "stop_exit_code": { "type": ["integer", "null"] }
+      }
+    },
+    "failures": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "overall": { "enum": ["PASS", "FAIL", "NOT_RUN"] },
+    "logs": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "required": [
+        "directory",
+        "code",
+        "product",
+        "product_report",
+        "app_start",
+        "app_start_error",
+        "app_stop"
+      ]
+    }
+  },
+  "$defs": {
+    "suite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command", "exit_code", "passed", "failed", "skipped", "status", "log"],
+      "properties": {
+        "command": { "type": ["string", "null"] },
+        "exit_code": { "type": ["integer", "null"] },
+        "passed": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "skipped": { "type": "integer", "minimum": 0 },
+        "status": { "enum": ["passed", "failed", "skipped"] },
+        "log": { "type": "string" },
+        "report": { "type": "string" }
+      }
+    }
+  }
+}

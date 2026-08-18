@@ -1,0 +1,13 @@
+test/logs/
+projects/*/test/logs/
+projects/*/test/last-run.json
+**/node_modules/
+**/__pycache__/
+*.egg-info/
+.pytest-tmp/
+.pytest_cache/
+.venv/
+.coverage
+**/.playwright-cache/
+projects/_template/test/product/test-results/
+projects/_template/test/product/playwright-report/

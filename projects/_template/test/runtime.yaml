@@ -1,0 +1,9 @@
+# Portable runtime for `sop test regression`.
+# Commands remain intentionally unconfigured until TEST packaging.
+code_root: bundle://workspaces/code/project/{{project-slug}}
+product_root: project://test/product
+code_test_cmd: null
+product_test_cmd: null
+access_url: null
+health_url: null
+startup_timeout_seconds: 60

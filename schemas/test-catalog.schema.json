@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.sop/schemas/test-catalog.schema.json",
+  "title": "SOP test catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "slug", "source", "generated_at", "cases"],
+  "properties": {
+    "version": { "const": 1 },
+    "slug": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["prd", "arch", "ui"],
+      "properties": {
+        "prd": { "type": "string", "minLength": 1 },
+        "arch": { "type": "string", "minLength": 1 },
+        "ui": { "type": "string", "minLength": 1 }
+      }
+    },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "layer", "priority", "trace", "deferred"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$" },
+          "title": { "type": "string", "minLength": 1 },
+          "layer": { "enum": ["code", "product", "both"] },
+          "priority": { "enum": ["P0", "P1", "P2"] },
+          "trace": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "type": "string", "pattern": "^(AC|F|P|API)(?:-|$).+" }
+          },
+          "script": { "type": "string", "minLength": 1 },
+          "code": { "type": "string" },
+          "product": { "type": "string" },
+          "deferred": { "type": "boolean" },
+          "deferred_reason": { "type": "string" },
+          "notes": { "type": "string" }
+        },
+        "allOf": [
+          {
+            "if": { "properties": { "deferred": { "const": true } } },
+            "then": { "required": ["deferred_reason"] }
+          },
+          {
+            "if": { "properties": { "layer": { "enum": ["code", "both"] } } },
+            "then": { "required": ["code"] }
+          },
+          {
+            "if": { "properties": { "layer": { "enum": ["product", "both"] } } },
+            "then": { "required": ["product"] }
+          }
+        ]
+      }
+    }
+  }
+}

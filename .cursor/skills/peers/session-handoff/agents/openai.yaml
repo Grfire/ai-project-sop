@@ -1,0 +1,5 @@
+interface:
+  display_name: "Session Handoff"
+  short_description: "Package ARCH context or resume a session"
+policy:
+  allow_implicit_invocation: false

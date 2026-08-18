@@ -1,0 +1,11 @@
+# catalog.yaml — copy to projects/<slug>/test/catalog.yaml
+# Unconfigured sentinels are blocked by runner preflight. Replace before use.
+
+version: 1
+slug: unconfigured
+source:
+  prd: bundle://workspaces/req/projects/{{project-slug}}/PRD.md
+  arch: bundle://workspaces/arch/projects/{{project-slug}}/design/CODING_HANDOFF.md
+  ui: bundle://workspaces/ui/projects/{{project-slug}}/design/design-spec.md
+generated_at: "1970-01-01T00:00:00Z"
+cases: []
