@@ -14,9 +14,12 @@ disable-model-invocation: true
 
 ## SOP adapter
 
-Loaded only by `sop-orchestrator`. Artifact root: `E:/workspace/ai_req_analysis/projects/<slug>/` (from `scripts/scaffold-sibling-stage.ps1 -Stage REQ`). Do not write PRDs into `ai-project-sop/projects/`. All write paths below use that absolute sibling root, never `projects/<slug>/` inside the SOP repo.
+Loaded only by `sop-orchestrator`. Artifact root: resolve `state.paths.req`
+(default `sop.yaml project_paths.req`) with the active slug. It may be created
+by `sop scaffold REQ --slug <slug>`. Do not write PRDs into the governance
+project root.
 
-If `E:/workspace/ai-project-sop/projects/<slug>/intake/handoffs/REQ.md`
+If `project://intake/handoffs/REQ.md`
 exists, read it before research. Treat it as sourced historical evidence and
 open questions—not as an automatic override of PRD intent. Cite evidence when
 proposing supplements.
@@ -33,7 +36,7 @@ auto-activate this skill or compete with the workspace's unique auto-entry.
 ## Workspace layout
 
 ```text
-E:/workspace/ai_req_analysis/projects/<project-slug>/
+state.paths.req/
   README.md
   PRD.md                 # main deliverable for tech + UI
   research-notes.md      # living research draft
@@ -47,7 +50,7 @@ E:/workspace/ai_req_analysis/projects/<project-slug>/
 
 ### 1. Start / resume project
 
-1. Identify or ask for project name → create/open `E:/workspace/ai_req_analysis/projects/<project-slug>/`.
+1. Identify or ask for project name → resolve and create/open `state.paths.req`.
 2. Read existing `PRD.md` and `research-notes.md` if present.
 3. State current stage: 调研澄清 / 草稿沉淀 / 定稿检查 / 方法沉淀.
 
@@ -61,7 +64,7 @@ E:/workspace/ai_req_analysis/projects/<project-slug>/
 
 Whenever a chunk of info is stable enough:
 
-1. Update `E:/workspace/ai_req_analysis/projects/<project-slug>/PRD.md` using [prd-template.md](prd-template.md). Keep unknown fields as `待确认：...` (never invent facts).
+1. Update `state.paths.req/PRD.md` using [prd-template.md](prd-template.md). Keep unknown fields as `待确认：...` (never invent facts).
 2. Keep sections filled enough for downstream tech/UI to act; mark gaps explicitly.
 3. Tell the user briefly what was updated in PRD (section names only).
 
@@ -105,8 +108,8 @@ When the user says 定稿 / 导出 / 可以给下游了:
 
    Unknown fields block `REQ_SIGNOFF` unless the user explicitly waives a legally permissible item.
 3. Set PRD status to `已定稿` and date.
-4. Confirm path: `E:/workspace/ai_req_analysis/projects/<project-slug>/PRD.md`.
-5. Tell the user downstream UI/原型应把**整个项目目录**交给设计侧；读取方式见设计仓技能 `prd-pack-ingest`（先 README + PRD 骨架 + 页面/功能/验收 + `sample-data/`，再开风格筛选）。设计产物应落在设计仓 `E:/workspace/ai-font-design/projects/<project-slug>/`（与本需求包同名），便于成对引用与迁移。
+4. Confirm path: `state.paths.req/PRD.md`.
+5. Tell the user downstream UI/原型应把**整个项目目录**交给设计侧；读取方式见设计仓技能 `prd-pack-ingest`（先 README + PRD 骨架 + 页面/功能/验收 + `sample-data/`，再开风格筛选）。设计产物落在 `state.paths.ui`（与本需求包同一 slug），便于成对引用与迁移。
 6. Propose skill method updates (next step)—do not silently edit the skill.
 7. After historical supplement edits, run `.\scripts\apply-supplement.ps1` and `validate-supplement.ps1 -TargetStage REQ`. That is provenance evidence, not `REQ_SIGNOFF`.
 
@@ -163,7 +166,7 @@ Do not claim 定稿 readiness while phase-blocking items remain. Prefer honest�
 When applying an intake SUP item to a canonical artifact:
 
 1. Edit the canonical file at this stage's sibling root (never the SOP intake copy).
-2. Add a `BACKFILL-<STAGE>-<nnn>` row to `E:/workspace/ai-project-sop/projects/<slug>/intake/evidence-map.md` citing intake evidence and the canonical path.
+2. Add a `BACKFILL-<STAGE>-<nnn>` row to `project://intake/evidence-map.md` citing intake evidence and the canonical path.
 3. Run:
 
 ```powershell

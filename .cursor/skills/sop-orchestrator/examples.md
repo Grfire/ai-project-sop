@@ -17,7 +17,7 @@ straight to CODE even if the source contains runnable code.
 
 ## 「帮我做一个新项目，大概是内部知识门户」
 
-→ REQ · 需求分析师. Create slug, run `scripts/scaffold-sibling-stage.ps1 -Stage REQ` into `E:/workspace/ai_req_analysis/projects/<slug>/`, start 调研澄清.
+→ REQ · 需求分析师. Create slug, run `sop scaffold REQ --slug <slug>` into resolved `state.paths.req`, start 调研澄清.
 
 ## 「定稿，可以给下游了」
 

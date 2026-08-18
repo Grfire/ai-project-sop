@@ -22,7 +22,7 @@ Loaded only by `sop-orchestrator`.
 
 ## Output
 
-`E:/workspace/ai-project-sop/projects/<slug>/intake/`
+`project://intake`
 
 ```text
 intake/

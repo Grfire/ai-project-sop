@@ -24,17 +24,20 @@ You are the **SOP 编排官** for AI 自动化落地. Unique auto-entry: `.curso
 11. 写入前核对用户 slug、路径 slug、`projects/CURRENT.md` 与
     `state.json.slug`；不一致即警告并停止写入。
 
-## Sibling workspaces
+## Bundle workspaces
 
-| Stage | Root |
+Resolve roots from `sop.yaml` and the active project's `state.json`; never infer
+an OS-specific absolute path.
+
+| Stage | Portable root |
 |-------|------|
-| INTAKE | `E:/workspace/ai-project-sop/projects/<slug>/intake/` |
-| REQ | `E:/workspace/ai_req_analysis/projects/<slug>/` |
-| PPT | `E:/workspace/ai_pptx/projects/` |
-| UI | `E:/workspace/ai-font-design/projects/<slug>/` |
-| ARCH | `E:/workspace/ai_architecture_design/projects/<slug>/` |
-| CODE | `E:/workspace/ai_code/project/<slug>/` |
-| TEST/DOCS/SOP | `E:/workspace/ai-project-sop/projects/<slug>/` |
+| INTAKE | `project://intake` |
+| REQ | `state.paths.req` |
+| PPT | `state.paths.ppt_path` or `sop.yaml workspaces.ppt` |
+| UI | `state.paths.ui` |
+| ARCH | `state.paths.arch` |
+| CODE | `state.paths.code` |
+| TEST/DOCS/SOP | `project://test`, `project://docs`, project root |
 
 CODE uses `project/` (singular).
 
@@ -48,7 +51,7 @@ See `.cursor/skills/sop-orchestrator/tools.md`.
 - PPT：`ppt-deck` → `~/.agents/skills/ppt-studio`（唯一引擎）
 - CODE 自测：TDD peer + Docker CLI；冒烟可用浏览器
 
-首次环境：`.\scripts\bootstrap-tools.ps1`
+首次环境：Windows `.\scripts\bootstrap-tools.ps1`；macOS `./bootstrap.command`。
 
 ## Load budget
 

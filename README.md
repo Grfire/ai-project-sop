@@ -2,13 +2,15 @@
 
 在**一个 Cursor 工作区**里串起：历史项目接管 / 需求 → 原型 → 技术方案 → 测试封装 → 代码 → 全量回归 → 文档。PPT 是显式请求才进入的可选支线。
 
-过程产物仍落在原工作区（同名 `<slug>`）。本仓库负责编排、测试包、文档风格记忆。
+过程产物统一落在 Bundle 内 `workspaces/`（同名 `<slug>`）。路径由
+`sop.yaml` 与项目 `state.json` 的 portable URI 决定。
 
 ## 怎么用
 
-1. 用 Cursor 打开 `E:\workspace\ai-project-sop`
-2. 直接说目标即可（「新项目做内部门户」「定稿」「做原型」「出技术方案」「让 code 改 SSO」）
-3. Agent 会：**识别意图 → 切换角色 → 调用对应 Skill → 该回归就回归**
+1. clone 后在 Windows 运行 `.\scripts\bootstrap-tools.ps1`，macOS 运行
+   `./bootstrap.command`
+2. 用 Cursor 打开仓库根目录
+3. 直接说目标即可；Agent 会：**识别意图 → 切换角色 → 调用对应 Skill → 该回归就回归**
 
 首次请给出或确认 `slug`（kebab-case）。新项目用
 `.\scripts\new-project.ps1 -Slug <slug>` 初始化；历史项目加
@@ -21,14 +23,14 @@
 
 | 角色 | 阶段 | 技能 | 产物位置 |
 |------|------|------|----------|
-| 项目接管分析师 | INTAKE | `historical-project-onboarding` | `ai-project-sop/projects/<slug>/intake/` |
-| 需求分析师 | REQ | `requirements-analysis` | `ai_req_analysis/projects/<slug>/` |
-| PPT策划 | PPT | `ppt-deck` → `ppt-studio`（明确意图才触发） | `ai_pptx/projects/` |
-| 原型设计师 | UI | ingest → visual-choice-first → frontend-design-studio | `ai-font-design/projects/<slug>/` |
-| 架构师 | ARCH | `prd-to-arch-design` | `ai_architecture_design/projects/<slug>/` |
-| 测试架构师 | TEST | `project-test` | `ai-project-sop/projects/<slug>/test/` |
-| 研发工程师 | CODE | `dev-agent` | `ai_code/project/<slug>/` |
-| 文档专员 | DOCS | `docs-output` | `ai-project-sop/projects/<slug>/docs/` |
+| 项目接管分析师 | INTAKE | `historical-project-onboarding` | `project://intake` |
+| 需求分析师 | REQ | `requirements-analysis` | `state.paths.req` |
+| PPT策划 | PPT | `ppt-deck` → `ppt-studio`（明确意图才触发） | `state.paths.ppt_path` |
+| 原型设计师 | UI | ingest → visual-choice-first → frontend-design-studio | `state.paths.ui` |
+| 架构师 | ARCH | `prd-to-arch-design` | `state.paths.arch` |
+| 测试架构师 | TEST | `project-test` | `project://test` |
+| 研发工程师 | CODE | `dev-agent` | `state.paths.code` |
+| 文档专员 | DOCS | `docs-output` | `project://docs` |
 
 ## 你要的五条能力
 
@@ -107,10 +109,10 @@ UI 不完整时 ARCH 可使用 `ui_input_mode=partial|none`，但必须展示缺
 .\scripts\bootstrap-tools.ps1
 ```
 
-默认使用清华 PyPI、npmmirror npm 与 Playwright 国内镜像；可用
-`-PipIndex` / `-NpmRegistry` / `-PlaywrightDownloadHost` 参数覆盖，或设置
+默认使用 PyPI、npm 与 Playwright 官方源；国内网络可设置
 `SOP_PIP_INDEX` / `SOP_NPM_REGISTRY` / `SOP_PLAYWRIGHT_DOWNLOAD_HOST`
-环境变量。镜像失败时脚本会尝试官方源，并输出可直接重试的参数提示。
+环境变量覆盖。Python >=3.10、Node/npm/npx 为必需；Playwright 会检测，
+Docker 与全局 PPT skill 为可选。
 
 | 环节 | 工具 |
 |------|------|
@@ -169,3 +171,22 @@ Skills 从下列仓库拷入 `.cursor/skills/`，并加上 SOP adapter：
 - PPT 无仓内技能，用薄封装 `ppt-deck` 调用全局 `ppt-studio`
 
 TEST 与 DOCS 是本仓库新建阶段。
+
+## 从旧 sibling 工作区迁移
+
+迁移默认不写入。先审查计划，再显式执行：
+
+```text
+python -m sop --root . migrate plan <slug>
+python -m sop --root . migrate apply <slug>
+python -m sop --root . migrate apply <slug> --execute
+```
+
+旧位置映射仅保存在 `sop.yaml migration.legacy_sources`。迁移排除 VCS、
+依赖、缓存与潜在 secret，先在各目标同卷 staging，校验 portable state
+和关键引用后再原子改名；已有目标不会被覆盖。非标准旧根可加
+`--legacy-root <path>`。
+
+macOS 的 Cursor PATH、MCP 和完整验证说明见
+[docs/mac-cursor.md](docs/mac-cursor.md)；架构取舍见
+[ADR-0004](docs/adr/0004-portable-bundle-and-python-core.md)。

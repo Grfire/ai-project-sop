@@ -14,10 +14,12 @@ disable-model-invocation: true
 
 ## SOP adapter
 
-Loaded only by `sop-orchestrator`. Artifact root: `E:/workspace/ai_architecture_design/projects/<slug>/`. PRD from `ai_req_analysis`, UI from `ai-font-design`, same slug. Still the sole router **inside ARCH**; SOP owns cross-stage routing.
+Loaded only by `sop-orchestrator`. Artifact root: resolved `state.paths.arch`.
+PRD comes from `state.paths.req`, UI from `state.paths.ui`, all with the same
+slug. Still the sole router **inside ARCH**; SOP owns cross-stage routing.
 
 If historical intake exists, read
-`E:/workspace/ai-project-sop/projects/<slug>/intake/handoffs/ARCH.md` before
+`project://intake/handoffs/ARCH.md` before
 Phase A. Preserve as-is evidence separately from to-be decisions; any proposed
 change still passes the normal grill gate.
 
@@ -114,7 +116,7 @@ only under `_probe/`; execution begins only after SOP routes to `dev-agent`.
 ## Deliverable tree
 
 ```text
-E:/workspace/ai_architecture_design/projects/<project-slug>/
+state.paths.arch/
 ├── README.md                            # 项目引用入口
 ├── CONTEXT.md
 ├── adr/                                 # 本项目 ADR
@@ -144,8 +146,8 @@ E:/workspace/ai_architecture_design/projects/<project-slug>/
 **Worker:** ARCH-local ingest in this root skill; **do not load UI
 `prd-pack-ingest`**  
 **Read:** finalized PRD from
-`E:/workspace/ai_req_analysis/projects/<slug>/` and any named UI evidence from
-`E:/workspace/ai-font-design/projects/<slug>/` (including design spec,
+`state.paths.req` and any named UI evidence from
+`state.paths.ui` (including design spec,
 prototype map/routes, visual decision evidence, and `UI_SIGNOFF` state)  
 **Write:** `design/00-brief.md`, `design/PIPELINE.md` in the ARCH artifact root.
 The brief records source paths/versions, scope, F/P/AC indexes, hard constraints,
@@ -238,7 +240,7 @@ Re-enter **B → G** if design materially changes after fusion/probe.
 When applying an intake SUP item to a canonical artifact:
 
 1. Edit the canonical file at this stage's sibling root (never the SOP intake copy).
-2. Add a `BACKFILL-<STAGE>-<nnn>` row to `E:/workspace/ai-project-sop/projects/<slug>/intake/evidence-map.md` citing intake evidence and the canonical path.
+2. Add a `BACKFILL-<STAGE>-<nnn>` row to `project://intake/evidence-map.md` citing intake evidence and the canonical path.
 3. Run:
 
 ```powershell

@@ -1,7 +1,7 @@
 # ARCH project scaffold
 
 Use `scripts/scaffold-sibling-stage.ps1 -Slug <slug> -Stage ARCH` to create
-`E:/workspace/ai_architecture_design/projects/<slug>/` when ARCH starts.
+resolved `state.paths.arch` when ARCH starts.
 
 Create the canonical pack under `design/` using
 `.cursor/skills/prd-to-arch-design/templates/`. The coding entry point is

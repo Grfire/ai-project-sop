@@ -3,7 +3,7 @@
   "hooks": {
     "sessionStart": [
       {
-        "command": "powershell -NoProfile -ExecutionPolicy Bypass -File .cursor/hooks/session-start.ps1"
+        "command": "node .cursor/hooks/session-start.mjs"
       }
     ]
   }

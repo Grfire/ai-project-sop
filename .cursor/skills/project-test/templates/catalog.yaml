@@ -1,4 +1,4 @@
-# catalog.yaml — copy to E:/workspace/ai-project-sop/projects/<slug>/test/catalog.yaml
+# catalog.yaml — copy to project://test/catalog.yaml
 # Unconfigured sentinels are blocked by runner preflight. Replace before use.
 
 version: 1

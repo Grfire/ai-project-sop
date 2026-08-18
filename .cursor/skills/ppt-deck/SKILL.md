@@ -25,7 +25,8 @@ current stage and must not load `ppt-studio`.
 
 ## Artifact root
 
-`E:/workspace/ai_pptx/projects/{slug}_ppt169_{YYYYMMDD}/`
+Resolve the PPT base from `sop.yaml workspaces.ppt`; after creating the dated
+deck directory, record its portable URI in `state.paths.ppt_path` and SOP.md.
 
 Record the actual directory in `projects/<slug>/SOP.md` (`ppt_path`).
 

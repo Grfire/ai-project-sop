@@ -1,4 +1,4 @@
-# Copy a stage vendor template into the sibling artifact root.
+# Legacy Windows wrapper for copying a stage template into the Bundle workspace.
 # Does not approve gates. PPT has no sibling template.
 [CmdletBinding(SupportsShouldProcess)]
 param(
@@ -23,10 +23,10 @@ $root = if (-not [string]::IsNullOrWhiteSpace($SopRoot)) {
 }
 
 $defaults = @{
-  REQ  = @{ Template = "vendor-templates\req-project";  DefaultRoot = "E:/workspace/ai_req_analysis/projects/$Slug" }
-  UI   = @{ Template = "vendor-templates\ui-project";   DefaultRoot = "E:/workspace/ai-font-design/projects/$Slug" }
-  ARCH = @{ Template = "vendor-templates\arch-project"; DefaultRoot = "E:/workspace/ai_architecture_design/projects/$Slug" }
-  CODE = @{ Template = "vendor-templates\code-project"; DefaultRoot = "E:/workspace/ai_code/project/$Slug" }
+  REQ  = @{ Template = "vendor-templates\req-project";  DefaultRoot = (Join-Path $root "workspaces\req\projects\$Slug") }
+  UI   = @{ Template = "vendor-templates\ui-project";   DefaultRoot = (Join-Path $root "workspaces\ui\projects\$Slug") }
+  ARCH = @{ Template = "vendor-templates\arch-project"; DefaultRoot = (Join-Path $root "workspaces\arch\projects\$Slug") }
+  CODE = @{ Template = "vendor-templates\code-project"; DefaultRoot = (Join-Path $root "workspaces\code\project\$Slug") }
 }
 
 $spec = $defaults[$Stage]

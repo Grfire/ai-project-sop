@@ -26,6 +26,25 @@ function Assert-Equal {
   }
 }
 
+function Assert-SopTimestamp {
+  param(
+    [string]$SopText,
+    [string]$Field,
+    $StateValue,
+    [string]$Message
+  )
+  $match = [regex]::Match(
+    $SopText,
+    "(?m)^\|[ \t]*$([regex]::Escape($Field))[ \t]*\|[ \t]*([^|]+?)[ \t]*\|[ \t]*\r?$"
+  )
+  if (-not $match.Success) { throw "$Message. SOP row is missing or empty." }
+  $stateInstant = [DateTimeOffset]$StateValue
+  $sopInstant = [DateTimeOffset]$match.Groups[1].Value.Trim()
+  if ($stateInstant.ToUniversalTime() -ne $sopInstant.ToUniversalTime()) {
+    throw "$Message. State='$StateValue', SOP='$($match.Groups[1].Value.Trim())'."
+  }
+}
+
 function Set-TextFileWithRetry {
   param(
     [Parameter(Mandatory = $true)][string]$Path,
@@ -373,9 +392,8 @@ exit 0
     throw "touch-code-change must write state.json last_code_change_at"
   }
   $sopText = Get-Content -Raw $sopPath
-  if ($sopText -notmatch [regex]::Escape($touched.timestamps.last_code_change_at)) {
-    throw "touch-code-change must write the same timestamp into SOP.md"
-  }
+  Assert-SopTimestamp $sopText "last_code_change_at" $touched.timestamps.last_code_change_at `
+    "touch-code-change must write the same timestamp into SOP.md"
 
   $sessionRoot = Join-Path $tempRoot "session-root"
   $sessionProject = Join-Path $sessionRoot "projects\session-app"

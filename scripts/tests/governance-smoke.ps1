@@ -32,6 +32,25 @@ function Assert-True {
   if (-not $Condition) { throw $Message }
 }
 
+function Assert-SopTimestamp {
+  param(
+    [string]$SopText,
+    [string]$Field,
+    $StateValue,
+    [string]$Message
+  )
+  $match = [regex]::Match(
+    $SopText,
+    "(?m)^\|[ \t]*$([regex]::Escape($Field))[ \t]*\|[ \t]*([^|]+?)[ \t]*\|[ \t]*\r?$"
+  )
+  if (-not $match.Success) { throw "$Message. SOP row is missing or empty." }
+  $stateInstant = [DateTimeOffset]$StateValue
+  $sopInstant = [DateTimeOffset]$match.Groups[1].Value.Trim()
+  if ($stateInstant.ToUniversalTime() -ne $sopInstant.ToUniversalTime()) {
+    throw "$Message. State='$StateValue', SOP='$($match.Groups[1].Value.Trim())'."
+  }
+}
+
 function Invoke-Script {
   param([string]$File, [string[]]$Arguments)
   $output = & $shell -NoProfile -File $File @Arguments
@@ -175,7 +194,7 @@ try {
   $state = Get-Content -Raw $statePath | ConvertFrom-Json
   Assert-True (-not [string]::IsNullOrWhiteSpace([string]$state.timestamps.intake_completed_at)) "INTAKE_COMPLETE must stamp intake_completed_at"
   $sopText = Get-Content -Raw (Join-Path $tempRoot "projects\$slug\SOP.md")
-  Assert-True ($sopText -match [regex]::Escape($state.timestamps.intake_completed_at)) "SOP.md must mirror intake_completed_at"
+  Assert-SopTimestamp $sopText "intake_completed_at" $state.timestamps.intake_completed_at "SOP.md must mirror intake_completed_at"
 
   $codeEarly = Invoke-Script (Join-Path $repoRoot "scripts\record-gate.ps1") @(
     "-Slug", $slug, "-SopRoot", $tempRoot,
@@ -490,7 +509,7 @@ try {
   $state = Get-Content -Raw $statePath | ConvertFrom-Json
   Assert-True (-not [string]::IsNullOrWhiteSpace([string]$state.timestamps.lifecycle_changed_at)) "set-lifecycle must stamp lifecycle_changed_at"
   $sopAfterPause = Get-Content -Raw (Join-Path $tempRoot "projects\$slug\SOP.md")
-  Assert-True ($sopAfterPause -match [regex]::Escape($state.timestamps.lifecycle_changed_at)) "SOP.md must mirror lifecycle_changed_at"
+  Assert-SopTimestamp $sopAfterPause "lifecycle_changed_at" $state.timestamps.lifecycle_changed_at "SOP.md must mirror lifecycle_changed_at"
   $blockedWrite = Invoke-Script (Join-Path $repoRoot "scripts\touch-code-change.ps1") @(
     "-Slug", $slug, "-SopRoot", $tempRoot,
     "-DecisionMaker", "tester", "-ConfirmationQuote", "attempt paused runtime change",

@@ -71,4 +71,8 @@ Read in order: `~/.agents/skills/ppt-studio/SKILL.md` then the chosen engine (`p
 .\scripts\bootstrap-tools.ps1
 ```
 
-Checks Node / Python / Docker / Playwright browsers / `python-docx` / `python-pptx` / `openpyxl` / `pypdf`.
+On macOS use `./bootstrap.command`. Both wrappers call `scripts/bootstrap.py`,
+which checks Python >=3.10, Node/npm/npx, Playwright, optional Docker, and the
+optional global PPT skill. Official package sources are the default; mirror
+overrides use `SOP_PIP_INDEX`, `SOP_NPM_REGISTRY`, and
+`SOP_PLAYWRIGHT_DOWNLOAD_HOST`.

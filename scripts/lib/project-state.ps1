@@ -255,14 +255,20 @@ function Update-SopFieldRow {
     [Parameter(Mandatory = $true)][string]$Value
   )
   if (-not (Test-Path -LiteralPath $SopPath)) { return $false }
-  $sop = [IO.File]::ReadAllText($SopPath)
-  $pattern = "(?im)^(\|\s*$([regex]::Escape($Field))\s*\|)\s*[^|]*?(\|\s*)$"
-  if (-not [regex]::IsMatch($sop, $pattern)) { return $false }
-  $updated = [regex]::Replace($sop, $pattern, { param($m) $m.Groups[1].Value + " $Value " + $m.Groups[2].Value }, 1)
+  $lines = [IO.File]::ReadAllLines($SopPath)
+  $pattern = "^\|[ \t]*$([regex]::Escape($Field))[ \t]*\|"
+  $updated = $false
+  for ($i = 0; $i -lt $lines.Length; $i++) {
+    if (-not $updated -and [regex]::IsMatch($lines[$i], $pattern)) {
+      $lines[$i] = "| $Field | $Value |"
+      $updated = $true
+    }
+  }
+  if (-not $updated) { return $false }
   $utf8 = [Text.UTF8Encoding]::new($false)
   $temp = "$SopPath.$([Guid]::NewGuid().ToString("N")).tmp"
   try {
-    [IO.File]::WriteAllText($temp, $updated, $utf8)
+    [IO.File]::WriteAllLines($temp, $lines, $utf8)
     [IO.File]::Copy($temp, $SopPath, $true)
   } finally {
     if (Test-Path -LiteralPath $temp) { Remove-Item -LiteralPath $temp -Force }
@@ -288,17 +294,20 @@ function Update-SopStageRow {
     [string]$Note = ""
   )
   if (-not (Test-Path -LiteralPath $SopPath)) { return $false }
-  $sop = [IO.File]::ReadAllText($SopPath)
-  # A table cell may contain an escaped pipe (`\|`). Treat escaped characters
-  # as cell content instead of terminating the Markdown column.
-  $cell = "(?:\\.|[^|])*"
-  $pattern = "(?im)^(\|\s*$([regex]::Escape($Stage))\s*\|)\s*$cell(\|)\s*$cell(\|\s*)$"
-  if (-not [regex]::IsMatch($sop, $pattern)) { return $false }
-  $updated = [regex]::Replace($sop, $pattern, "`$1 $Status `$2 $Note `$3", 1)
+  $lines = [IO.File]::ReadAllLines($SopPath)
+  $pattern = "^\|[ \t]*$([regex]::Escape($Stage))[ \t]*\|"
+  $updated = $false
+  for ($i = 0; $i -lt $lines.Length; $i++) {
+    if (-not $updated -and [regex]::IsMatch($lines[$i], $pattern)) {
+      $lines[$i] = "| $Stage | $Status | $Note |"
+      $updated = $true
+    }
+  }
+  if (-not $updated) { return $false }
   $utf8 = [Text.UTF8Encoding]::new($false)
   $temp = "$SopPath.$([Guid]::NewGuid().ToString("N")).tmp"
   try {
-    [IO.File]::WriteAllText($temp, $updated, $utf8)
+    [IO.File]::WriteAllLines($temp, $lines, $utf8)
     [IO.File]::Copy($temp, $SopPath, $true)
   } finally {
     if (Test-Path -LiteralPath $temp) { Remove-Item -LiteralPath $temp -Force }

@@ -15,7 +15,7 @@ not merge their paths or semantics.
 When invoked by `prd-to-arch-design`:
 
 1. Write
-   `E:/workspace/ai_architecture_design/projects/<slug>/design/CODING_HANDOFF.md`.
+   `state.paths.arch/design/CODING_HANDOFF.md`.
 2. Use
    `../../prd-to-arch-design/templates/CODING_HANDOFF.md` as the canonical
    template (path relative to this `SKILL.md`).

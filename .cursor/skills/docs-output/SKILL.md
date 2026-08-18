@@ -19,14 +19,14 @@ Display format is whatever the user asked (Markdown default, DOCX/PDF only if th
 DOCX: `python scripts/md-to-docx.py <md> <docx>` after Markdown is final. Need `python-docx` (`.\scripts\bootstrap-tools.ps1`).
 
 For a historical project, read
-`E:/workspace/ai-project-sop/projects/<slug>/intake/handoffs/DOCS.md`. Existing
+`project://intake/handoffs/DOCS.md`. Existing
 documents are style/content evidence; extract a style-card before generating the
 next document, and flag stale facts instead of copying them.
 
 ## Artifact root
 
 ```text
-E:/workspace/ai-project-sop/projects/<slug>/docs/
+project://docs
   registry.md
   style-memory/<doc-type>/style-card.md
   output/<doc-type>/<YYYYMMDD>-<short-title>.md
@@ -92,7 +92,7 @@ This refresh is ongoing lifecycle work and does not add a new stage after DOCS:
 When applying an intake SUP item to a canonical artifact:
 
 1. Edit the canonical file at this stage's sibling root (never the SOP intake copy).
-2. Add a `BACKFILL-<STAGE>-<nnn>` row to `E:/workspace/ai-project-sop/projects/<slug>/intake/evidence-map.md` citing intake evidence and the canonical path.
+2. Add a `BACKFILL-<STAGE>-<nnn>` row to `project://intake/evidence-map.md` citing intake evidence and the canonical path.
 3. Run:
 
 ```powershell
