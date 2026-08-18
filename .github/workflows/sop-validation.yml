@@ -26,7 +26,7 @@ jobs:
       - name: Install Python dependencies
         run: python -m pip install --upgrade pip && python -m pip install -e ".[dev]"
       - name: Run pytest
-        run: python -m pytest -q --basetemp .pytest-tmp/current-run
+        run: python -m pytest -q --basetemp .pytest-tmp
       - name: Validate static contracts
         run: python scripts/validate-static-contracts.py
       - name: Run CLI smoke

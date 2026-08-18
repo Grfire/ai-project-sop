@@ -65,7 +65,7 @@ overwrite any Bundle target.
 ## Validate
 
 ```bash
-.venv/bin/python -m pytest -q --basetemp .pytest-tmp/current-run
+.venv/bin/python -m pytest -q --basetemp .pytest-tmp
 .venv/bin/python scripts/validate-static-contracts.py
 .venv/bin/python -m sop --root . project list
 node .cursor/hooks/session-start.mjs

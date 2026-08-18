@@ -256,7 +256,10 @@ function Update-SopFieldRow {
   )
   if (-not (Test-Path -LiteralPath $SopPath)) { return $false }
   $sop = [IO.File]::ReadAllText($SopPath)
-  $pattern = "(?im)^(\|\s*$([regex]::Escape($Field))\s*\|)\s*[^|]*?(\|\s*)$"
+  # Keep row matching horizontal-only. `\s` may consume LF under PowerShell 7,
+  # causing a table update to cross row boundaries on Unix-style files.
+  $hspace = "[ \t]*"
+  $pattern = "(?im)^(\|$hspace$([regex]::Escape($Field))$hspace\|)$hspace[^|\r\n]*?$hspace(\|$hspace)\r?$"
   if (-not [regex]::IsMatch($sop, $pattern)) { return $false }
   $updated = [regex]::Replace($sop, $pattern, { param($m) $m.Groups[1].Value + " $Value " + $m.Groups[2].Value }, 1)
   $utf8 = [Text.UTF8Encoding]::new($false)
@@ -291,8 +294,9 @@ function Update-SopStageRow {
   $sop = [IO.File]::ReadAllText($SopPath)
   # A table cell may contain an escaped pipe (`\|`). Treat escaped characters
   # as cell content instead of terminating the Markdown column.
-  $cell = "(?:\\.|[^|])*"
-  $pattern = "(?im)^(\|\s*$([regex]::Escape($Stage))\s*\|)\s*$cell(\|)\s*$cell(\|\s*)$"
+  $cell = "(?:\\.|[^|\r\n])*"
+  $hspace = "[ \t]*"
+  $pattern = "(?im)^(\|$hspace$([regex]::Escape($Stage))$hspace\|)$hspace$cell(\|)$hspace$cell(\|$hspace)\r?$"
   if (-not [regex]::IsMatch($sop, $pattern)) { return $false }
   $updated = [regex]::Replace($sop, $pattern, "`$1 $Status `$2 $Note `$3", 1)
   $utf8 = [Text.UTF8Encoding]::new($false)
