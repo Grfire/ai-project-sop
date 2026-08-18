@@ -17,8 +17,8 @@ paths and terminal action:
 
 | Context | Canonical output | Terminal action |
 |---------|------------------|-----------------|
-| UI | `E:/workspace/ai-font-design/projects/<slug>/design/design-spec.md` | Return to `sop-orchestrator` for ARCH routing |
-| ARCH | Files selected by `prd-to-arch-design` under `E:/workspace/ai_architecture_design/projects/<slug>/design/` | Return to `prd-to-arch-design` for grill/package |
+| UI | `state.paths.ui/design/design-spec.md` | Return to `sop-orchestrator` for ARCH routing |
+| ARCH | Files selected by `prd-to-arch-design` under `state.paths.arch/design/` | Return to `prd-to-arch-design` for grill/package |
 
 Do not write SOP-owned work to `docs/superpowers/specs/`, commit it, invoke
 `writing-plans`, or start implementation. In UI context,

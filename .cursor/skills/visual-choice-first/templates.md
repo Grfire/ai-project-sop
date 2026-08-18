@@ -30,7 +30,7 @@ companion 的 `content/`（内容片段，勿包整页 html）。类名依赖 co
 ## visual-direction.md 持久化模板
 
 保存到
-`E:/workspace/ai-font-design/projects/<slug>/design/visual-direction.md`：
+`state.paths.ui/design/visual-direction.md`：
 
 ```markdown
 # Visual Direction: <project-slug>

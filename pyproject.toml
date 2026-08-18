@@ -12,6 +12,9 @@ dependencies = [
   "jsonschema>=4.23.0",
 ]
 
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
 [project.scripts]
 sop = "sop.cli:main"
 

@@ -50,7 +50,7 @@ worker，再由 SOP 激活 `frontend-design-studio`。若输入是定稿 PRD 包
 4. 简短标注每版意图（一句话）+ 推荐一版及理由；**正文里不要用长文代替画面**。
 5. 等用户筛选（可点选）后，再进入细化；未选定风格前不写实现代码。
 6. 把选择证据写入
-   `E:/workspace/ai-font-design/projects/<slug>/design/visual-direction.md`，使用
+   `state.paths.ui/design/visual-direction.md`，使用
    [templates.md](templates.md#visual-directionmd-持久化模板) 中的模板。
 
 六版要拉开差异：色温、对比、密度、衬线/无衬线、机关/企业/编辑/工具感等至少有可感知差别。避免六版都是「同类紫白 / 同类灰底蓝钮」。

@@ -14,20 +14,20 @@ disable-model-invocation: true
 ## SOP adapter
 
 Loaded only by `sop-orchestrator` as the UI suite entry worker. Read PRD packs
-from `E:/workspace/ai_req_analysis/projects/<slug>/`. Write the UI ingest brief
-to `E:/workspace/ai-font-design/projects/<slug>/`. While this worker is active,
+from resolved `state.paths.req`. Write the UI ingest brief to resolved
+`state.paths.ui`. While this worker is active,
 do not read or activate `visual-choice-first`, `frontend-design-studio`, or a
 companion skill. Return an explicit ingest handoff to SOP first.
 
 For historical projects, first read
-`E:/workspace/ai-project-sop/projects/<slug>/intake/handoffs/UI.md`. Use it to
+`project://intake/handoffs/UI.md`. Use it to
 inventory existing screens/routes/assets and gaps; the finalized PRD still wins
 product acceptance.
 
 **原则：** 用户后续会持续投喂**同类定稿需求包**（目录，不单是一篇聊天摘要）。先按包结构读全再设计；禁止只读标题或凭对话臆造范围。
 
 上游写 PRD：本仓 `.cursor/skills/requirements-analysis/SKILL.md`，产物位于
-`E:/workspace/ai_req_analysis/projects/<slug>/`。  
+`state.paths.req`。
 本技能只管**读定稿包 → 抽出设计/原型工作简报 → 返回 SOP handoff**；不得
 ambient-load 后续 UI worker。
 
@@ -140,7 +140,7 @@ UI 阶段的终点是已确认的 `design/design-spec.md` 与 `prototype/`。本
 在 `ai-font-design`（或同类设计仓）产出时，**项目文档与设计结果一律进**：
 
 ```text
-E:/workspace/ai-font-design/projects/<project-slug>/
+state.paths.ui/
   README.md                 # 引用入口（上游 PRD 路径、如何启动）
   design/                   # visual-direction.md、design-spec.md、说明稿
   prototype/                # 可运行前端（勿再默认写到 apps/）
@@ -182,7 +182,7 @@ E:/workspace/ai-font-design/projects/<project-slug>/
 When applying an intake SUP item to a canonical artifact:
 
 1. Edit the canonical file at this stage's sibling root (never the SOP intake copy).
-2. Add a `BACKFILL-<STAGE>-<nnn>` row to `E:/workspace/ai-project-sop/projects/<slug>/intake/evidence-map.md` citing intake evidence and the canonical path.
+2. Add a `BACKFILL-<STAGE>-<nnn>` row to `project://intake/evidence-map.md` citing intake evidence and the canonical path.
 3. Run:
 
 ```powershell

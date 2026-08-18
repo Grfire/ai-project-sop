@@ -15,7 +15,7 @@ Loaded only by `sop-orchestrator`. Prefer Chinese unless the user writes otherwi
 **Announce:** 「正在使用 `project-test`：用例目录 → 代码测试 + 浏览器产品测试 → 脚本回归。」
 
 For a historical project, read
-`E:/workspace/ai-project-sop/projects/<slug>/intake/handoffs/TEST.md` before
+`project://intake/handoffs/TEST.md` before
 building the catalog. Preserve usable existing suites/commands, map them to
 F/AC/API/P traces, then add—not replace—the missing coverage.
 
@@ -30,7 +30,7 @@ F/AC/API/P traces, then add—not replace—the missing coverage.
 
 ## Artifact root
 
-`E:/workspace/ai-project-sop/projects/<slug>/test/`
+`project://test`
 
 Code-test **files** live in the CODE repo (so they run with the app). This pack stores catalog, mappings, product specs, and wrappers.
 
@@ -154,7 +154,7 @@ Refresh catalog when PRD AC/F/P or ARCH `05`/`06` changed. Set SOP.md `test_pack
 When applying an intake SUP item to a canonical artifact:
 
 1. Edit the canonical file at this stage's sibling root (never the SOP intake copy).
-2. Add a `BACKFILL-<STAGE>-<nnn>` row to `E:/workspace/ai-project-sop/projects/<slug>/intake/evidence-map.md` citing intake evidence and the canonical path.
+2. Add a `BACKFILL-<STAGE>-<nnn>` row to `project://intake/evidence-map.md` citing intake evidence and the canonical path.
 3. Run:
 
 ```powershell

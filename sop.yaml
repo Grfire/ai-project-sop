@@ -18,3 +18,10 @@ project_paths:
   code: bundle://workspaces/code/project/{slug}
   test: project://test
   docs: project://docs
+migration:
+  legacy_sources:
+    governance: E:/workspace/ai-project-sop/projects/{slug}
+    req: E:/workspace/ai_req_analysis/projects/{slug}
+    ui: E:/workspace/ai-font-design/projects/{slug}
+    arch: E:/workspace/ai_architecture_design/projects/{slug}
+    code: E:/workspace/ai_code/project/{slug}

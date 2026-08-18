@@ -15,12 +15,16 @@ disable-model-invocation: true
 
 ## SOP adapter
 
-Loaded only by `sop-orchestrator` for STAGE CODE. Treat `E:/workspace/ai_code/` as the coding workspace: product at `project/<slug>/`, Run Card at `project/dev-agent/runtime/run-card.md`. After any runtime-affecting change, return control to SOP for **full TEST regression** (do not skip). Before implementing, SOP must have run impact 分诊.
+Loaded only by `sop-orchestrator` for STAGE CODE. Resolve the coding workspace
+from `state.paths.code`; the Run Card is
+`state.paths.code/dev-agent/runtime/run-card.md`. After any runtime-affecting
+change, return control to SOP for **full TEST regression** (do not skip).
+Before implementing, SOP must have run impact 分诊.
 
 Discipline peers (Read when the phase needs them): `.cursor/skills/peers/test-driven-development/SKILL.md`, `systematic-debugging`, `verification-before-completion`. Smoke `access_url` with `cursor-ide-browser` if Docker health is up.
 
 For a historical project, read
-`E:/workspace/ai-project-sop/projects/<slug>/intake/handoffs/CODE.md` before
+`project://intake/handoffs/CODE.md` before
 ingest-docs. Use its discovered repo root and commands, but verify commands
 without executing unknown scripts during INTAKE.
 
@@ -153,7 +157,7 @@ See [routing.md](routing.md).
 When applying an intake SUP item to a canonical artifact:
 
 1. Edit the canonical file at this stage's sibling root (never the SOP intake copy).
-2. Add a `BACKFILL-<STAGE>-<nnn>` row to `E:/workspace/ai-project-sop/projects/<slug>/intake/evidence-map.md` citing intake evidence and the canonical path.
+2. Add a `BACKFILL-<STAGE>-<nnn>` row to `project://intake/evidence-map.md` citing intake evidence and the canonical path.
 3. Run:
 
 ```powershell

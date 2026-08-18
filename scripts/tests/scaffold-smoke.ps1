@@ -92,7 +92,7 @@ try {
   $readme = Get-Content -Raw -Encoding utf8 (Join-Path $reqTarget "README.md")
   Assert-True ($readme -match [regex]::Escape($slug)) "REQ scaffold must replace project placeholders"
   Assert-True ($readme -notmatch "\{\{项目名称\}\}|\{\{project-slug\}\}") "REQ scaffold must not leave placeholders"
-  Assert-True ($readme -match "ai_req_analysis/projects") "REQ README must use the absolute sibling root"
+  Assert-True ($readme -match "state\.paths\.req") "REQ README must use the portable configured root"
 
   $second = Invoke-Script (Join-Path $repoRoot "scripts\scaffold-sibling-stage.ps1") @(
     "-Slug", $slug,

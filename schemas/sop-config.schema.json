@@ -11,7 +11,8 @@
     "templates_root",
     "schemas_root",
     "workspaces",
-    "project_paths"
+    "project_paths",
+    "migration"
   ],
   "properties": {
     "version": { "const": 1 },
@@ -50,12 +51,35 @@
         "test": { "$ref": "#/$defs/portable_uri" },
         "docs": { "$ref": "#/$defs/portable_uri" }
       }
+    },
+    "migration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["legacy_sources"],
+      "properties": {
+        "legacy_sources": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["governance", "req", "ui", "arch", "code"],
+          "properties": {
+            "governance": { "$ref": "#/$defs/legacy_path" },
+            "req": { "$ref": "#/$defs/legacy_path" },
+            "ui": { "$ref": "#/$defs/legacy_path" },
+            "arch": { "$ref": "#/$defs/legacy_path" },
+            "code": { "$ref": "#/$defs/legacy_path" }
+          }
+        }
+      }
     }
   },
   "$defs": {
     "portable_uri": {
       "type": "string",
       "pattern": "^(bundle|project)://(?:[^{}\\\\]|\\{slug\\})*$"
+    },
+    "legacy_path": {
+      "type": "string",
+      "pattern": "^[A-Za-z]:[/\\\\].*\\{slug\\}.*$"
     }
   }
 }

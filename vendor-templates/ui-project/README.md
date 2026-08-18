@@ -1,7 +1,7 @@
 # UI project scaffold
 
 Use `scripts/scaffold-sibling-stage.ps1 -Slug <slug> -Stage UI` to create
-`E:/workspace/ai-font-design/projects/<slug>/` when UI starts. Do not copy this
+resolved `state.paths.ui` when UI starts. Do not copy this
 directory by hand into the SOP repo.
 
 ```text

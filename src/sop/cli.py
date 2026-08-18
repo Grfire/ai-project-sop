@@ -19,6 +19,7 @@ from .governance import (
     touch_code,
     write_governance,
 )
+from .migration import migration_apply, migration_plan
 from .operations import (
     inventory,
     run_regression,
@@ -134,6 +135,20 @@ def build_parser() -> argparse.ArgumentParser:
     command = sub.add_parser("context")
     command.add_argument("--slug")
 
+    migrate = top.add_parser("migrate")
+    sub = migrate.add_subparsers(dest="action", required=True)
+    command = sub.add_parser("plan")
+    command.add_argument("slug")
+    command.add_argument("--legacy-root", type=Path)
+    command = sub.add_parser("apply")
+    command.add_argument("slug")
+    command.add_argument("--legacy-root", type=Path)
+    command.add_argument(
+        "--execute",
+        action="store_true",
+        help="perform the migration; without this flag apply remains a dry-run",
+    )
+
     schema = top.add_parser("schema")
     sub = schema.add_subparsers(dest="action", required=True)
     command = sub.add_parser("validate")
@@ -209,6 +224,12 @@ def dispatch(args: argparse.Namespace, config: Config) -> Any:
         return validate_docs(path.resolve())
     if group == "session":
         return session_context(config, args.slug)
+    if group == "migrate":
+        if action == "plan":
+            return migration_plan(config, args.slug, args.legacy_root)
+        return migration_apply(
+            config, args.slug, args.legacy_root, execute=args.execute
+        )
     if group == "schema":
         return validate_schema(config, args.schema, args.instance.resolve())
     if group == "static":

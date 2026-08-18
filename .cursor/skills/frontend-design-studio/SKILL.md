@@ -16,7 +16,7 @@ disable-model-invocation: true
 Loaded only by `sop-orchestrator` as the final worker in the UI suite. Activate
 only after ingest and visual handoffs exist and both prior workers have been
 released. Deliver to
-`E:/workspace/ai-font-design/projects/<slug>/{design,prototype}/`. Same slug as
+resolved `state.paths.ui/{design,prototype}/`. Same slug as
 the REQ pack. Do not reload prior worker skills; consume their persisted
 handoffs/evidence.
 
@@ -75,7 +75,7 @@ handoffs/evidence.
 
 ## 项目交付目录
 
-产品原型与设计文档写入 `E:/workspace/ai-font-design/projects/<project-slug>/`（`design/` + `prototype/`），与上游 PRD 包同名。详见 `prd-pack-ingest`「设计侧交付落点」。
+产品原型与设计文档写入 `state.paths.ui`（`design/` + `prototype/`），与上游 PRD 包同一 slug。详见 `prd-pack-ingest`「设计侧交付落点」。
 
 UI 阶段至少交付 `design/visual-direction.md`、`design/design-spec.md` 和
 `prototype/`。门禁由用户在对话中确认，不依赖 Markdown checkbox validator。

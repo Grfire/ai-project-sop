@@ -1,7 +1,7 @@
 # CODE project scaffold
 
 Use `scripts/scaffold-sibling-stage.ps1 -Slug <slug> -Stage CODE` to create
-`E:/workspace/ai_code/project/<slug>/` when CODE starts.
+resolved `state.paths.code` when CODE starts.
 
 Dev-agent state belongs under:
 
